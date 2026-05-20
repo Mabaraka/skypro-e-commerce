@@ -28,11 +28,19 @@ class Category:
         Category.product_count += len(products)
 
     def add_product(self, product: Product):
+        """
+        Add product to the category
+        :param product: product to be added
+        """
         self.__products.append(product)
         Category.product_count += 1
 
     @property
     def products(self) -> str:
+        """
+        Product property
+        :return: string of the products"
+        """
         return "".join(
             f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт. \n" for product in self.__products
         )

@@ -21,19 +21,32 @@ class Product:
         """
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
 
     @classmethod
     def new_product(cls, p_dict: dict) -> Product:
+        """
+        Product constructor
+        :param p_dict: dictionary with product information
+        :return: product instance
+        """
         return cls(**p_dict)
 
     @property
     def price(self) -> float:
+        """
+        Product price getter
+        :return: price of the product
+        """
         return self.__price
 
     @price.setter
-    def price(self, value: float) -> None:
+    def price(self, value: float):
+        """
+        Product price setter
+        :param value: new price of the product, must be greater than 0
+        """
         if value <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
