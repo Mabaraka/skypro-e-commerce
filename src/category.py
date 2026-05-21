@@ -32,6 +32,8 @@ class Category:
         Add product to the category
         :param product: product to be added
         """
+        if not isinstance(product, Product):
+            raise TypeError
         self.__products.append(product)
         Category.product_count += 1
 
