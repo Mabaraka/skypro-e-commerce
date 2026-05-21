@@ -58,3 +58,17 @@ def test_price_setter_invalid_negative(capsys):
 
     captured = capsys.readouterr()
     assert captured.out.strip() == "Цена не должна быть нулевая или отрицательная"
+
+
+def test_product_str(product_laptop):
+    """Проверка строкового представления продукта."""
+    assert str(product_laptop) == "Ноутбук, 70000.0 руб. Остаток: 3 шт. "
+
+
+def test_product_add(product_laptop, product_mouse):
+    """Проверка сложения двух продуктов (суммирование общей стоимости).
+
+    Расчет: (70000.0 * 3) + (3000.0 * 10) = 210000.0 + 30000.0 = 240000.0
+    """
+    total_cost = product_laptop + product_mouse
+    assert total_cost == 240000.0
