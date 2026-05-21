@@ -55,3 +55,20 @@ def test_add_product(sample_products):
 
     assert Category.product_count == 3
     assert "Клавиатура, 5000.0 руб. Остаток: 7 шт. \n" in category.products
+
+
+def test_category_str(sample_products):
+    """Проверка строкового представления категории.
+
+    В фикстуре sample_products: 5 ноутбуков + 10 мышей = 15 шт. всего.
+    """
+    category = Category("Электроника", "Гаджеты", sample_products)
+
+    assert str(category) == "Электроника, количество продуктов: 15 шт."
+
+
+def test_category_str_empty():
+    """Проверка строкового представления пустой категории."""
+    category = Category("Пустая", "Без товаров", [])
+
+    assert str(category) == "Пустая, количество продуктов: 0 шт."

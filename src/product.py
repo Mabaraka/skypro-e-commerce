@@ -51,3 +51,9 @@ class Product:
             print("Цена не должна быть нулевая или отрицательная")
         else:
             self.__price = value
+
+    def __str__(self) -> str:
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт. "
+
+    def __add__(self, other: Product) -> float:
+        return (self.__price * self.quantity) + (other.__price * other.quantity)

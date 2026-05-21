@@ -20,3 +20,15 @@ def sample_products():
         Product("Ноутбук", "Игровой", 75000.0, 5),
         Product("Мышь", "Беспроводная", 3000.0, 10),
     ]
+
+
+@pytest.fixture
+def product_laptop():
+    """Фикстура для создания первого продукта."""
+    return Product("Ноутбук", "Игровой", 70000.0, 3)
+
+
+@pytest.fixture
+def product_mouse():
+    """Фикстура для создания второго продукта."""
+    return Product("Мышь", "Беспроводная", 3000.0, 10)

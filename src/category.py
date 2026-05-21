@@ -41,6 +41,8 @@ class Category:
         Product property
         :return: string of the products"
         """
-        return "".join(
-            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт. \n" for product in self.__products
-        )
+        return "".join(f"{str(product)}\n" for product in self.__products)
+
+    def __str__(self) -> str:
+        quantity_all_products = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {quantity_all_products} шт."
