@@ -8,8 +8,14 @@ def test_category_initialization(sample_products):
 
     assert category.name == "Электроника"
     assert category.description == "Гаджеты и техника"
-    assert category.products == sample_products
-    assert len(category.products) == 2
+
+
+def test_category_products_property(sample_products):
+    """Проверка геттера products, который возвращает строковое представление."""
+    category = Category("Электроника", "Гаджеты и техника", sample_products)
+
+    expected_output = "Ноутбук, 75000.0 руб. Остаток: 5 шт. \n" "Мышь, 3000.0 руб. Остаток: 10 шт. \n"
+    assert category.products == expected_output
 
 
 def test_category_counters_single_category(sample_products):
@@ -27,9 +33,7 @@ def test_category_counters_multiple_categories(sample_products):
     Category("Электроника", "Гаджеты и техника", sample_products)
     Category("Смартфоны", "Мобильные телефоны", extra_products)
 
-    # Всего создано 2 категории
     assert Category.category_count == 2
-    # Всего продуктов во всех категориях: 2 + 1 = 3
     assert Category.product_count == 3
 
 
@@ -37,6 +41,17 @@ def test_category_with_empty_products():
     """Проверка создания категории без продуктов."""
     category = Category("Пустая категория", "Здесь ничего нет", [])
 
-    assert category.products == []
+    assert category.products == ""
     assert Category.category_count == 1
     assert Category.product_count == 0
+
+
+def test_add_product(sample_products):
+    """Проверка метода add_product и корректного увеличения счетчика продуктов."""
+    category = Category("Электроника", "Гаджеты и техника", sample_products)
+    new_product = Product("Клавиатура", "Механическая", 5000.0, 7)
+
+    category.add_product(new_product)
+
+    assert Category.product_count == 3
+    assert "Клавиатура, 5000.0 руб. Остаток: 7 шт. \n" in category.products
