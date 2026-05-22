@@ -1,5 +1,9 @@
+import pytest
+
 from src.category import Category
+from src.product import LawnGrass
 from src.product import Product
+from src.product import Smartphone
 
 
 def test_category_initialization(sample_products):
@@ -55,6 +59,69 @@ def test_add_product(sample_products):
 
     assert Category.product_count == 3
     assert "Клавиатура, 5000.0 руб. Остаток: 7 шт. \n" in category.products
+
+
+def test_add_product_subclass_smartphone():
+    """Проверка добавления подкласса (Smartphone) в категорию."""
+    category = Category("Электроника", "Техника", [])
+
+    iphone = Smartphone(
+        name="iPhone 15",
+        description="Флагман",
+        price=100000.0,
+        quantity=5,
+        efficiency=4.5,
+        model="15 Pro",
+        memory=256,
+        color="Titanium",
+    )
+
+    category.add_product(iphone)
+
+    assert Category.product_count == 1
+    assert "iPhone 15" in category.products
+
+
+def test_add_product_subclass_lawn_grass():
+    """Проверка добавления подкласса (LawnGrass) в категорию."""
+    category = Category("Сад", "Все для сада", [])
+
+    grass = LawnGrass(
+        name="Тень-Экстра",
+        description="Трава",
+        price=500.0,
+        quantity=20,
+        country="Германия",
+        germination_period="14 дней",
+        color="Зеленый",
+    )
+
+    category.add_product(grass)
+
+    assert Category.product_count == 1
+    assert "Тень-Экстра" in category.products
+
+
+def test_add_product_invalid_type_raises_type_error():
+    """Проверка, что добавление объекта не-Product (например, строки) вызывает TypeError."""
+    category = Category("Электроника", "Гаджеты", [])
+
+    # Пытаемся добавить обычную строку вместо объекта Product
+    with pytest.raises(TypeError):
+        category.add_product("Это просто строка, а не продукт")
+
+    # Проверяем, что счетчик продуктов не увеличился
+    assert Category.product_count == 0
+
+
+def test_add_product_invalid_number_raises_type_error():
+    """Проверка, что добавление числа вызывает TypeError."""
+    category = Category("Электроника", "Гаджеты", [])
+
+    with pytest.raises(TypeError):
+        category.add_product(42)
+
+    assert Category.product_count == 0
 
 
 def test_category_str(sample_products):
