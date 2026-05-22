@@ -29,7 +29,7 @@ class BaseProduct(ABC):
         pass
 
 
-class Product(LogInitMixin, BaseProduct):
+class Product(BaseProduct, LogInitMixin):
     """
     Product class
     """
@@ -41,12 +41,12 @@ class Product(LogInitMixin, BaseProduct):
 
     def __init__(self, name: str, description: str, price: float, quantity: int, **kwargs) -> None:
         # Передаём kwargs дальше (LogInitMixin -> BaseProduct -> object)
-        super().__init__(name=name, description=description, price=price, quantity=quantity, **kwargs)
-
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
+
+        super().__init__(name=name, description=description, price=price, quantity=quantity, **kwargs)
 
     @classmethod
     def new_product(cls, p_dict: dict) -> Product:
@@ -92,23 +92,23 @@ class Smartphone(Product):
     color: str
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
-        efficiency: float,
-        model: str,
-        memory: int,
-        color: str,
+            self,
+            name: str,
+            description: str,
+            price: float,
+            quantity: int,
+            efficiency: float,
+            model: str,
+            memory: int,
+            color: str,
     ) -> None:
         # Специфичные для Smartphone параметры НЕ передаём наверх —
         # BaseProduct их не знает и **kwargs не пробросит дальше.
-        super().__init__(name=name, description=description, price=price, quantity=quantity)
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
         self.color = color
+        super().__init__(name=name, description=description, price=price, quantity=quantity)
 
 
 class LawnGrass(Product):
@@ -117,16 +117,16 @@ class LawnGrass(Product):
     color: str
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
-        country: str,
-        germination_period: str,
-        color: str,
+            self,
+            name: str,
+            description: str,
+            price: float,
+            quantity: int,
+            country: str,
+            germination_period: str,
+            color: str,
     ) -> None:
-        super().__init__(name=name, description=description, price=price, quantity=quantity)
         self.country = country
         self.germination_period = germination_period
         self.color = color
+        super().__init__(name=name, description=description, price=price, quantity=quantity)
