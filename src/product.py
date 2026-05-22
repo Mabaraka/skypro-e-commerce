@@ -29,7 +29,7 @@ class BaseProduct(ABC):
         pass
 
 
-class Product(BaseProduct, LogInitMixin):
+class Product(LogInitMixin, BaseProduct):
     """
     Product class
     """
@@ -92,15 +92,15 @@ class Smartphone(Product):
     color: str
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            price: float,
-            quantity: int,
-            efficiency: float,
-            model: str,
-            memory: int,
-            color: str,
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
     ) -> None:
         # Специфичные для Smartphone параметры НЕ передаём наверх —
         # BaseProduct их не знает и **kwargs не пробросит дальше.
@@ -117,14 +117,14 @@ class LawnGrass(Product):
     color: str
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            price: float,
-            quantity: int,
-            country: str,
-            germination_period: str,
-            color: str,
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
     ) -> None:
         self.country = country
         self.germination_period = germination_period
