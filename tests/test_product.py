@@ -1,6 +1,60 @@
 import pytest
 
+from src.product import BaseProduct
 from src.product import Product
+
+
+def test_base_product_cannot_be_instantiated():
+    """Проверка, что BaseProduct является строго абстрактным и его нельзя создать."""
+    with pytest.raises(TypeError):
+        BaseProduct()
+
+
+def test_base_product_enforces_method_implementation():
+    """Проверка, что наследники BaseProduct обязаны реализовать все абстрактные методы."""
+
+    class IncompleteProduct(BaseProduct):
+        pass
+
+    with pytest.raises(TypeError):
+        IncompleteProduct()
+
+
+def test_products_are_instances_of_base_product(product_laptop, smartphone_iphone, grass_shady):
+    """Проверка, что все типы продуктов наследуются от BaseProduct."""
+    assert isinstance(product_laptop, BaseProduct)
+    assert isinstance(smartphone_iphone, BaseProduct)
+    assert isinstance(grass_shady, BaseProduct)
+
+
+def test_log_init_mixin_output(capsys):
+    """Проверка, что LogInitMixin выводит лог в консоль при создании Product."""
+    # Создаем продукт (миксин должен сработать в этот момент)
+    _ = Product("Планшет", "10 дюймов", 30000.0, 3)
+
+    # Перехватываем вывод в консоль
+    captured = capsys.readouterr()
+
+    # Проверяем, что в выводе есть имя класса и параметры
+    # (Настройте assert под точный формат вашей строки логирования в миксине)
+    assert "Product" in captured.out
+    assert "Планшет" in captured.out
+    assert "30000.0" in captured.out
+
+
+def test_log_init_mixin_with_subclasses(capsys, smartphone_iphone):
+    """Проверка, что логирование корректно работает и для наследников (Smartphone)."""
+    # Для чистоты теста создадим объект прямо здесь:
+
+    from src.product import Smartphone  # Или откуда импортируется Smartphone
+
+    _ = Smartphone("iPhone 15", "15 Pro", 100000.0, 5, 4.5, 256, "Titanium", "red")
+
+    captured = capsys.readouterr()
+
+    # Проверяем, что логируется именно имя дочернего класса, а не базового
+    assert "Smartphone" in captured.out
+    assert "iPhone 15" in captured.out
 
 
 def test_product_initialization():
@@ -48,7 +102,7 @@ def test_price_setter_invalid_zero(capsys):
     assert product.price == 1500.0
 
     captured = capsys.readouterr()
-    assert captured.out.strip() == "Цена не должна быть нулевая или отрицательная"
+    assert "Цена не должна быть нулевая или отрицательная" in captured.out.strip()
 
 
 def test_price_setter_invalid_negative(capsys):
@@ -59,7 +113,7 @@ def test_price_setter_invalid_negative(capsys):
     assert product.price == 1500.0
 
     captured = capsys.readouterr()
-    assert captured.out.strip() == "Цена не должна быть нулевая или отрицательная"
+    assert "Цена не должна быть нулевая или отрицательная" in captured.out.strip()
 
 
 def test_product_str(product_laptop):

@@ -1,7 +1,35 @@
 from __future__ import annotations
 
+from abc import ABC
+from abc import abstractmethod
 
-class Product:
+from src.mixins import LogInitMixin
+
+
+class BaseProduct(ABC):
+    """
+    BaseProduct abstract class
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__()
+
+    @property
+    @abstractmethod
+    def price(self) -> float:
+        pass
+
+    @price.setter
+    @abstractmethod
+    def price(self, new_price: float) -> None:
+        pass
+
+    @abstractmethod
+    def __add__(self, other: BaseProduct) -> float:
+        pass
+
+
+class Product(LogInitMixin, BaseProduct):
     """
     Product class
     """
@@ -11,14 +39,10 @@ class Product:
     __price: float
     quantity: int
 
-    def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
-        """
-        Product constructor
-        :param name: name of the product
-        :param description: description of the product
-        :param price: price of the product
-        :param quantity: quantity of the product
-        """
+    def __init__(self, name: str, description: str, price: float, quantity: int, **kwargs) -> None:
+        # Передаём kwargs дальше (LogInitMixin -> BaseProduct -> object)
+        super().__init__(name=name, description=description, price=price, quantity=quantity, **kwargs)
+
         self.name = name
         self.description = description
         self.__price = price
@@ -42,15 +66,15 @@ class Product:
         return self.__price
 
     @price.setter
-    def price(self, value: float):
+    def price(self, new_price: float):
         """
         Product price setter
-        :param value: new price of the product, must be greater than 0
+        :param new_price: new price of the product, must be greater than 0
         """
-        if value <= 0:
+        if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
-            self.__price = value
+            self.__price = new_price
 
     def __str__(self) -> str:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт. "
@@ -77,8 +101,10 @@ class Smartphone(Product):
         model: str,
         memory: int,
         color: str,
-    ):
-        super().__init__(name, description, price, quantity)
+    ) -> None:
+        # Специфичные для Smartphone параметры НЕ передаём наверх —
+        # BaseProduct их не знает и **kwargs не пробросит дальше.
+        super().__init__(name=name, description=description, price=price, quantity=quantity)
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
@@ -99,8 +125,8 @@ class LawnGrass(Product):
         country: str,
         germination_period: str,
         color: str,
-    ):
-        super().__init__(name, description, price, quantity)
+    ) -> None:
+        super().__init__(name=name, description=description, price=price, quantity=quantity)
         self.country = country
         self.germination_period = germination_period
         self.color = color
