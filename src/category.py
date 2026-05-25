@@ -48,3 +48,12 @@ class Category:
     def __str__(self) -> str:
         quantity_all_products = sum(product.quantity for product in self.__products)
         return f"{self.name}, количество продуктов: {quantity_all_products} шт."
+
+    def get_average_price(self) -> float:
+        try:
+            sum = 0
+            for product in self.__products:
+                sum += product.price
+            return sum / len(self.__products)
+        except ZeroDivisionError:
+            return 0
