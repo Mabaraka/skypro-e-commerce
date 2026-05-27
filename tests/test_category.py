@@ -139,3 +139,13 @@ def test_category_str_empty():
     category = Category("Пустая", "Без товаров", [])
 
     assert str(category) == "Пустая, количество продуктов: 0 шт."
+
+
+def test_get_average_price(sample_products):
+    category = Category("Электроника", "Гаджеты", sample_products)
+    assert category.get_average_price() == 39000.0
+
+
+def test_get_average_price_with_empty_products():
+    category = Category("Электроника", "Гаджеты", [])
+    assert category.get_average_price() == 0

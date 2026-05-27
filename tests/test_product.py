@@ -67,6 +67,18 @@ def test_product_initialization():
     assert product.quantity == 5
 
 
+def test_product_initialization_zero_quantity():
+    """Проверка отработки выброса исключения при 0 количестве продукта"""
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Ноутбук", "Мощный игровой ноутбук", 75000.0, 0)
+
+
+def test_product_initialization_nigative_quantity():
+    """Проверка отработки выброса исключения при отрицательном количестве продукта"""
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        Product("Ноутбук", "Мощный игровой ноутбук", 75000.0, -1)
+
+
 def test_product_types():
     """Проверка типов данных после инициализации."""
     product = Product("Телефон", "Смартфон", 29990.50, 10)
